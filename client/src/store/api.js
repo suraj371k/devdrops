@@ -1,193 +1,218 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: '/api',
+  baseUrl: "https://devdrops-gdk2.onrender.com/api",
   prepareHeaders: (headers, { getState }) => {
-    const token = getState().auth.token
+    const token = getState().auth.token;
     if (token) {
-      headers.set('Authorization', `Bearer ${token}`)
+      headers.set("Authorization", `Bearer ${token}`);
     }
-    return headers
+    return headers;
   },
-})
+});
 
 export const api = createApi({
-  reducerPath: 'api',
+  reducerPath: "api",
   baseQuery,
-  tagTypes: ['Drop', 'Collection', 'User', 'Stats', 'Recall'],
+  tagTypes: ["Drop", "Collection", "User", "Stats", "Recall"],
   endpoints: (builder) => ({
     // Auth
     register: builder.mutation({
       query: (data) => ({
-        url: '/auth/register',
-        method: 'POST',
+        url: "/auth/register",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
     login: builder.mutation({
       query: (data) => ({
-        url: '/auth/login',
-        method: 'POST',
+        url: "/auth/login",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
     logout: builder.mutation({
       query: () => ({
-        url: '/auth/logout',
-        method: 'POST',
+        url: "/auth/logout",
+        method: "POST",
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
     getMe: builder.query({
-      query: () => '/auth/me',
-      providesTags: ['User'],
+      query: () => "/auth/me",
+      providesTags: ["User"],
     }),
     updatePreferences: builder.mutation({
       query: (data) => ({
-        url: '/auth/preferences',
-        method: 'PUT',
+        url: "/auth/preferences",
+        method: "PUT",
         body: data,
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
 
     // Drops
     getDrops: builder.query({
       query: ({ page = 1, limit = 8, ...filters } = {}) => ({
-        url: '/drops',
+        url: "/drops",
         params: { page, limit, ...filters },
       }),
-      providesTags: ['Drop'],
+      providesTags: ["Drop"],
     }),
     getDrop: builder.query({
       query: (id) => `/drops/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Drop', id }],
+      providesTags: (result, error, id) => [{ type: "Drop", id }],
     }),
     getRecallDrops: builder.query({
       query: ({ page = 1, limit = 8 } = {}) => ({
-        url: '/drops/recall',
+        url: "/drops/recall",
         params: { page, limit },
       }),
-      providesTags: ['Recall'],
+      providesTags: ["Recall"],
     }),
     getRelatedDrops: builder.query({
       query: (id) => `/drops/related/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Drop', id: `related-${id}` }],
+      providesTags: (result, error, id) => [
+        { type: "Drop", id: `related-${id}` },
+      ],
     }),
     createDrop: builder.mutation({
       query: (data) => ({
-        url: '/drops',
-        method: 'POST',
+        url: "/drops",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Drop', 'Recall', 'Stats'],
+      invalidatesTags: ["Drop", "Recall", "Stats"],
     }),
     updateDrop: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/drops/${id}`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Drop', id }, 'Drop', 'Stats'],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Drop", id },
+        "Drop",
+        "Stats",
+      ],
     }),
     deleteDrop: builder.mutation({
       query: (id) => ({
         url: `/drops/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Drop', 'Recall', 'Stats'],
+      invalidatesTags: ["Drop", "Recall", "Stats"],
     }),
     markRecalled: builder.mutation({
       query: ({ id, recallType, confidence }) => ({
         url: `/drops/${id}/recall`,
-        method: 'POST',
+        method: "POST",
         body: { recallType, confidence },
       }),
-      invalidatesTags: ['Drop', 'Recall', 'Stats'],
+      invalidatesTags: ["Drop", "Recall", "Stats"],
     }),
     addRelatedDrop: builder.mutation({
       query: ({ id, relatedDropId }) => ({
         url: `/drops/${id}/relate`,
-        method: 'POST',
+        method: "POST",
         body: { relatedDropId },
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Drop', id }, 'Drop'],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Drop", id },
+        "Drop",
+      ],
     }),
     toggleFavorite: builder.mutation({
       query: (id) => ({
         url: `/drops/${id}/favorite`,
-        method: 'PUT',
+        method: "PUT",
       }),
-      invalidatesTags: (result, error, id) => [{ type: 'Drop', id }, 'Drop', 'Stats'],
+      invalidatesTags: (result, error, id) => [
+        { type: "Drop", id },
+        "Drop",
+        "Stats",
+      ],
     }),
     getDropStats: builder.query({
-      query: () => '/drops/stats',
-      providesTags: ['Stats'],
+      query: () => "/drops/stats",
+      providesTags: ["Stats"],
     }),
     bulkDropAction: builder.mutation({
       query: (data) => ({
-        url: '/drops/bulk',
-        method: 'POST',
+        url: "/drops/bulk",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Drop', 'Recall', 'Stats', 'Collection'],
+      invalidatesTags: ["Drop", "Recall", "Stats", "Collection"],
     }),
 
     // Collections
     getCollections: builder.query({
-      query: () => '/collections',
-      providesTags: ['Collection'],
+      query: () => "/collections",
+      providesTags: ["Collection"],
     }),
     getCollection: builder.query({
       query: (id) => `/collections/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Collection', id }],
+      providesTags: (result, error, id) => [{ type: "Collection", id }],
     }),
     createCollection: builder.mutation({
       query: (data) => ({
-        url: '/collections',
-        method: 'POST',
+        url: "/collections",
+        method: "POST",
         body: data,
       }),
-      invalidatesTags: ['Collection'],
+      invalidatesTags: ["Collection"],
     }),
     updateCollection: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/collections/${id}`,
-        method: 'PUT',
+        method: "PUT",
         body: data,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Collection', id }, 'Collection'],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Collection", id },
+        "Collection",
+      ],
     }),
     deleteCollection: builder.mutation({
       query: (id) => ({
         url: `/collections/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Collection'],
+      invalidatesTags: ["Collection"],
     }),
     addDropToCollection: builder.mutation({
       query: ({ collectionId, dropId }) => ({
         url: `/collections/${collectionId}/drops`,
-        method: 'POST',
+        method: "POST",
         body: { dropId },
       }),
-      invalidatesTags: (result, error, { collectionId }) => [{ type: 'Collection', id: collectionId }, 'Collection'],
+      invalidatesTags: (result, error, { collectionId }) => [
+        { type: "Collection", id: collectionId },
+        "Collection",
+      ],
     }),
     removeDropFromCollection: builder.mutation({
       query: ({ collectionId, dropId }) => ({
         url: `/collections/${collectionId}/drops/${dropId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: (result, error, { collectionId }) => [{ type: 'Collection', id: collectionId }, 'Collection'],
+      invalidatesTags: (result, error, { collectionId }) => [
+        { type: "Collection", id: collectionId },
+        "Collection",
+      ],
     }),
     generateShareToken: builder.mutation({
       query: (id) => ({
         url: `/collections/${id}/share`,
-        method: 'GET',
+        method: "GET",
       }),
-      invalidatesTags: (result, error, id) => [{ type: 'Collection', id }, 'Collection'],
+      invalidatesTags: (result, error, id) => [
+        { type: "Collection", id },
+        "Collection",
+      ],
     }),
 
     // Public
@@ -196,13 +221,13 @@ export const api = createApi({
     }),
     explorePublicDrops: builder.query({
       query: ({ page = 1, limit = 8, ...filters } = {}) => ({
-        url: '/public/explore',
+        url: "/public/explore",
         params: { page, limit, ...filters },
       }),
-      providesTags: ['Drop'],
+      providesTags: ["Drop"],
     }),
   }),
-})
+});
 
 export const {
   useRegisterMutation,
@@ -232,4 +257,4 @@ export const {
   useGenerateShareTokenMutation,
   useGetSharedCollectionQuery,
   useExplorePublicDropsQuery,
-} = api
+} = api;
