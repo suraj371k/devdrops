@@ -255,3 +255,9 @@
 [2026-08-30T07:25:04.927Z] [INFO] SIGINT received, shutting down gracefully
 [2026-08-30T07:25:11.251Z] [INFO] Server started on port 3000 {"env":"development","pid":28516}
 [2026-08-30T07:25:59.291Z] [INFO] Server started on port 3000 {"env":"development","pid":25840}
+[2026-08-30T07:38:03.763Z] [INFO] Server started on port 3000 {"env":"development","pid":27756}
+[2026-08-30T07:38:12.070Z] [INFO] Server started on port 3000 {"env":"development","pid":29504}
+[2026-08-30T07:40:40.296Z] [WARN] Request completed with client error {"method":"GET","path":"/me","statusCode":401,"duration":"9ms","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36","userId":"anonymous"}
+[2026-08-30T07:40:40.301Z] [WARN] Request completed with client error {"method":"GET","path":"/stats","statusCode":401,"duration":"2ms","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36","userId":"anonymous"}
+[2026-08-30T07:40:40.306Z] [WARN] Request completed with client error {"method":"GET","path":"/","statusCode":401,"duration":"1ms","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36","userId":"anonymous"}
+[2026-08-30T07:40:40.310Z] [WARN] Request completed with client error {"method":"GET","path":"/recall","statusCode":401,"duration":"2ms","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36","userId":"anonymous"}
